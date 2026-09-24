@@ -12,16 +12,25 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout output branch
-        uses: actions/checkout@v4
-        with:
-          ref: output
-          fetch-depth: 0
-
       - name: Generate snake (white-red theme)
         uses: Platane/snk@v3
         with:
           github_user_name: ${{ github.repository_owner }}
           outputs: |
-            github-contribution-grid-snake.svg?color_snake=#ef4444&color_dots=#ffffff,#fee2e2,#fca5a5,#ef4444,#b91c1c
-            github-contribution-grid-snake-dark.svg?color_snake=#ef4444&color_dots=#0d1117,#7f1d1d,#991b1b,#dc2626,#ef4444
+            dist/github-contribution-grid-snake.svg?color_snake=#ef4444&color_dots=#ffffff,#fee2e2,#fca5a5,#ef4444,#b91c1c
+            dist/github-contribution-grid-snake-dark.svg?color_snake=#ef4444&color_dots=#0d1117,#7f1d1d,#991b1b,#dc2626,#ef4444
+
+      - name: Verify dist/ contents
+        run: |
+          echo "=== ls dist/ ==="
+          ls -la dist/ || echo "dist/ not found"
+          echo "=== file sizes ==="
+          for f in dist/*.svg dist/*.gif; do [ -f "$f" ] && echo "$f: $(stat -c%s "$f") bytes"; done
+
+      - name: Push dist/ to output branch
+        uses: crazy-max/ghaction-github-pages@v3.1.0
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

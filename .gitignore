@@ -1,0 +1,18 @@
+# IntelliJ / JetBrains IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor swap files
+*.swp
+*.swo

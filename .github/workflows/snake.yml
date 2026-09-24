@@ -1,0 +1,45 @@
+name: Generate snake animation
+
+on:
+  # 北京时间每天 8:05 跑一次
+  schedule:
+    - cron: "5 0 * * *"
+  # 允许在 Actions 页面手动触发，便于测试
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    # v3 必须显式声明写权限，否则 push 会报 403
+    permissions:
+      contents: write
+
+    steps:
+      # 关键：把 output 分支 checkout 出来，Action 才会把生成物写到这里
+      - name: Checkout output branch
+        uses: actions/checkout@v4
+        with:
+          ref: output
+          fetch-depth: 0
+
+      - name: Generate snake (light theme)
+        uses: Platane/snk@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          # 白红双拼 - 浅色主题：白底 + 4 档红
+          colors: "github-light|#ffffff|#fee2e2|#fca5a5|#ef4444|#b91c1c"
+
+      - name: Generate snake (dark theme)
+        uses: Platane/snk@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          # 白红双拼 - 深色主题：暗底 + 4 档红
+          colors: "github-dark|#0d1117|#7f1d1d|#991b1b|#dc2626|#ef4444"
+
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit --allow-empty -m "snake: regenerate" || echo "no changes"
+          git push origin output

@@ -1,0 +1,14 @@
+.github/workflows/snake.yml
+  h_e501752fc60351 20-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "e244b16ea981211b0e4a6fd50bb6e0b5e049c14e",
+  "prompts": {},
+  "humans": {
+    "h_e501752fc60351": {
+      "author": "masonFEI <994085848@qq.com>"
+    }
+  }
+}
